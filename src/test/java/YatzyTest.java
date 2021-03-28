@@ -1,110 +1,133 @@
-import org.junit.*;
-import static org.junit.Assert.*;
+import model.Dice;
+import org.junit.Test;
+import util.YatzyUtility;
+
+import static model.Category.*;
+import static model.Dice.*;
+import static org.junit.Assert.assertEquals;
+
 
 public class YatzyTest {
 
     @Test
-    public void chance_scores_sum_of_all_dice() {
-        int expected = 15;
-        int actual = Yatzy.chance(2,3,4,5,1);
-        assertEquals(expected, actual);
-        assertEquals(16, Yatzy.chance(3,3,4,5,1));
-    }
-
-    @Test public void yatzy_scores_50() {
-        int expected = 50;
-        int actual = Yatzy.yatzy(4,4,4,4,4);
-        assertEquals(expected, actual);
-        assertEquals(50, Yatzy.yatzy(6,6,6,6,6));
-        assertEquals(0, Yatzy.yatzy(6,6,6,6,3));
-    }
-
-    @Test public void test_1s() {
-        assertTrue(Yatzy.ones(1,2,3,4,5) == 1);
-        assertEquals(2, Yatzy.ones(1,2,1,4,5));
-        assertEquals(0, Yatzy.ones(6,2,2,4,5));
-        assertEquals(4, Yatzy.ones(1,2,1,1,1));
+    public void chance_should_scores_sum_of_all_dice() {
+        assertEquals(15, YatzyUtility.getScore(new Dice[]{TWO, THREE, FOUR, FIVE, ONE}, CHANCE));
+        assertEquals(16, YatzyUtility.getScore(new Dice[]{THREE, THREE, FOUR, FIVE, ONE}, CHANCE));
     }
 
     @Test
-    public void test_2s() {
-        assertEquals(4, Yatzy.twos(1,2,3,2,6));
-        assertEquals(10, Yatzy.twos(2,2,2,2,2));
+    public void yatzy_should_scores_50_case_all_the_same() {
+        assertEquals(50, YatzyUtility.getScore(new Dice[]{FOUR, FOUR, FOUR, FOUR, FOUR}, YAHTZEE));
+        assertEquals(50, YatzyUtility.getScore(new Dice[]{SIX, SIX, SIX, SIX, SIX}, YAHTZEE));
     }
 
     @Test
-    public void test_threes() {
-        assertEquals(6, Yatzy.threes(1,2,3,2,3));
-        assertEquals(12, Yatzy.threes(2,3,3,3,3));
+    public void yatzy_should_scores_0_case_not_all_the_same() {
+        assertEquals(0, YatzyUtility.getScore(new Dice[]{SIX, SIX, SIX, SIX, THREE}, YAHTZEE));
+    }
+
+
+    @Test
+    public void ones_should_scores_sum_of_ones() {
+        assertEquals(1, YatzyUtility.getScore(new Dice[]{ONE, TWO, THREE, FOUR, FIVE}, ONES));
+        assertEquals(2, YatzyUtility.getScore(new Dice[]{ONE, TWO, ONE, FOUR, FIVE}, ONES));
+        assertEquals(0, YatzyUtility.getScore(new Dice[]{SIX, TWO, TWO, FOUR, FIVE}, ONES));
+        assertEquals(4, YatzyUtility.getScore(new Dice[]{ONE, TWO, ONE, ONE, ONE}, ONES));
+    }
+
+
+    @Test
+    public void twos_should_scores_sum_of_tows() {
+        assertEquals(4, YatzyUtility.getScore(new Dice[]{ONE, TWO, THREE, TWO, SIX}, TWOS));
+        assertEquals(10, YatzyUtility.getScore(new Dice[]{TWO, TWO, TWO, TWO, TWO}, TWOS));
     }
 
     @Test
-    public void fours_test()
-    {
-        assertEquals(12, new Yatzy(4,4,4,5,5).fours());
-        assertEquals(8, new Yatzy(4,4,5,5,5).fours());
-        assertEquals(4, new Yatzy(4,5,5,5,5).fours());
+    public void threes_should_scores_sum_of_threes() {
+        assertEquals(6, YatzyUtility.getScore(new Dice[]{ONE, TWO, THREE, TWO, THREE}, THREES));
+        assertEquals(12, YatzyUtility.getScore(new Dice[]{TWO, THREE, THREE, THREE, THREE}, THREES));
     }
 
     @Test
-    public void fives() {
-        assertEquals(10, new Yatzy(4,4,4,5,5).fives());
-        assertEquals(15, new Yatzy(4,4,5,5,5).fives());
-        assertEquals(20, new Yatzy(4,5,5,5,5).fives());
+    public void fours_should_scores_sum_of_fours() {
+        assertEquals(12, YatzyUtility.getScore(new Dice[]{FOUR, FOUR, FOUR, FIVE, FIVE}, FOURS));
+        assertEquals(8, YatzyUtility.getScore(new Dice[]{FOUR, FOUR, FIVE, FIVE, FIVE}, FOURS));
+        assertEquals(4, YatzyUtility.getScore(new Dice[]{FOUR, FIVE, FIVE, FIVE, FIVE}, FOURS));
     }
 
     @Test
-    public void sixes_test() {
-        assertEquals(0, new Yatzy(4,4,4,5,5).sixes());
-        assertEquals(6, new Yatzy(4,4,6,5,5).sixes());
-        assertEquals(18, new Yatzy(6,5,6,6,5).sixes());
+    public void fives_should_scores_sum_of_fives() {
+        assertEquals(10, YatzyUtility.getScore(new Dice[]{FOUR, FOUR, FOUR, FIVE, FIVE}, FIVES));
+        assertEquals(15, YatzyUtility.getScore(new Dice[]{FOUR, FOUR, FIVE, FIVE, FIVE}, FIVES));
+        assertEquals(20, YatzyUtility.getScore(new Dice[]{FOUR, FIVE, FIVE, FIVE, FIVE}, FIVES));
     }
 
     @Test
-    public void one_pair() {
-        assertEquals(6, Yatzy.score_pair(3,4,3,5,6));
-        assertEquals(10, Yatzy.score_pair(5,3,3,3,5));
-        assertEquals(12, Yatzy.score_pair(5,3,6,6,5));
+    public void sixes_should_scores_sum_of_sixes() {
+        assertEquals(0, YatzyUtility.getScore(new Dice[]{FOUR, FOUR, FOUR, FIVE, FIVE}, SIXES));
+        assertEquals(6, YatzyUtility.getScore(new Dice[]{FOUR, FOUR, SIX, FIVE, FIVE}, SIXES));
+        assertEquals(18, YatzyUtility.getScore(new Dice[]{SIX, FIVE, SIX, SIX, FIVE}, SIXES));
     }
 
     @Test
-    public void two_Pair() {
-        assertEquals(16, Yatzy.two_pair(3,3,5,4,5));
-        assertEquals(16, Yatzy.two_pair(3,3,5,5,5));
+    public void onePair_should_scores_sum_of_pair() {
+        assertEquals(6, YatzyUtility.getScore(new Dice[]{THREE, FOUR, THREE, FIVE, SIX}, ONE_PAIR));
     }
 
     @Test
-    public void three_of_a_kind()
-    {
-        assertEquals(9, Yatzy.three_of_a_kind(3,3,3,4,5));
-        assertEquals(15, Yatzy.three_of_a_kind(5,3,5,4,5));
-        assertEquals(9, Yatzy.three_of_a_kind(3,3,3,3,5));
+    public void onePair_should_scores_sum_of_pair_case_two_pair_founded() {
+        assertEquals(10, YatzyUtility.getScore(new Dice[]{FIVE, THREE, THREE, THREE, FIVE}, ONE_PAIR));
+        assertEquals(12, YatzyUtility.getScore(new Dice[]{FIVE, THREE, SIX, SIX, FIVE}, ONE_PAIR));
     }
 
     @Test
-    public void four_of_a_knd() {
-        assertEquals(12, Yatzy.four_of_a_kind(3,3,3,3,5));
-        assertEquals(20, Yatzy.four_of_a_kind(5,5,5,4,5));
-        assertEquals(9, Yatzy.three_of_a_kind(3,3,3,3,3));
+    public void twoPair_should_scores_sum_of_two_pair() {
+        assertEquals(16, YatzyUtility.getScore(new Dice[]{THREE, THREE, FIVE, FOUR, FIVE}, TWO_PAIR));
+        assertEquals(16, YatzyUtility.getScore(new Dice[]{THREE, THREE, FIVE, FIVE, FIVE}, TWO_PAIR));
     }
 
     @Test
-    public void smallStraight() {
-        assertEquals(15, Yatzy.smallStraight(1,2,3,4,5));
-        assertEquals(15, Yatzy.smallStraight(2,3,4,5,1));
-        assertEquals(0, Yatzy.smallStraight(1,2,2,4,5));
+    public void threeOfAKind_should_scores_sum_of_the_same_kind() {
+        assertEquals(9, YatzyUtility.getScore(new Dice[]{THREE, THREE, THREE, FOUR, FIVE}, THREE_OF_A_KIND));
+        assertEquals(15, YatzyUtility.getScore(new Dice[]{FIVE, THREE, FIVE, FOUR, FIVE}, THREE_OF_A_KIND));
+        assertEquals(9, YatzyUtility.getScore(new Dice[]{THREE, THREE, THREE, THREE, FIVE}, THREE_OF_A_KIND));
     }
 
     @Test
-    public void largeStraight() {
-        assertEquals(20, Yatzy.largeStraight(6,2,3,4,5));
-        assertEquals(20, Yatzy.largeStraight(2,3,4,5,6));
-        assertEquals(0, Yatzy.largeStraight(1,2,2,4,5));
+    public void fourOfAKind_should_scores_sum_of_the_same_kind() {
+        assertEquals(12, YatzyUtility.getScore(new Dice[]{THREE, THREE, THREE, THREE, FIVE}, FOUR_OF_A_KIND));
+        assertEquals(20, YatzyUtility.getScore(new Dice[]{FIVE, FIVE, FIVE, FOUR, FIVE}, FOUR_OF_A_KIND));
     }
 
     @Test
-    public void fullHouse() {
-        assertEquals(18, Yatzy.fullHouse(6,2,2,2,6));
-        assertEquals(0, Yatzy.fullHouse(2,3,4,5,6));
+    public void smallStraight_should_scores_sum_of_the_4_sequential_starting_from_1_case_4_sequential_found() {
+        assertEquals(15, YatzyUtility.getScore(new Dice[]{ONE, TWO, THREE, FOUR, FIVE}, SMALL_STRAIGHT));
+        assertEquals(15, YatzyUtility.getScore(new Dice[]{TWO, THREE, FOUR, FIVE, ONE}, SMALL_STRAIGHT));
+    }
+
+    @Test
+    public void smallStraight_should_scores_0_case_4_sequential_starting_from_1_not_found() {
+        assertEquals(0, YatzyUtility.getScore(new Dice[]{ONE, TWO, TWO, FOUR, FIVE}, SMALL_STRAIGHT));
+    }
+
+    @Test
+    public void largeStraight_should_scores_sum_of_the_4_sequential_starting_from_2_case_4_sequential_found() {
+        assertEquals(20, YatzyUtility.getScore(new Dice[]{SIX, TWO, THREE, FOUR, FIVE}, LARGE_STRAIGHT));
+        assertEquals(20, YatzyUtility.getScore(new Dice[]{TWO, THREE, FOUR, FIVE, SIX}, LARGE_STRAIGHT));
+    }
+
+    @Test
+    public void largeStraight_should_scores_0_case_4_sequential_starting_from_1_not_found() {
+        assertEquals(0, YatzyUtility.getScore(new Dice[]{ONE, TWO, TWO, FOUR, FIVE}, LARGE_STRAIGHT));
+    }
+
+    @Test
+    public void fullHouse_should_scores_sum_case_twoKind_and_threeKind() {
+        assertEquals(18, YatzyUtility.getScore(new Dice[]{SIX, TWO, TWO, TWO, SIX}, FULL_HOUSE));
+    }
+
+    @Test
+    public void fullHouse_should_scores_0_case_not_twoKind_and_threeKind() {
+        assertEquals(0, YatzyUtility.getScore(new Dice[]{TWO, THREE, FOUR, FIVE, SIX}, FULL_HOUSE));
     }
 }
